@@ -3,6 +3,7 @@ package com;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,30 +19,34 @@ public class ItemController {
 	@Autowired
 	private ItemService itemService;
 
-	@RequestMapping(method = RequestMethod.GET, value = "/test", produces = "text/plain")
-	public @ResponseBody void doGet(HttpServletRequest req) {
+	@RequestMapping(method = RequestMethod.GET, value = "/read-item", produces = "text/plain")
+	public @ResponseBody void doGet(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		try {
 			long id = Long.valueOf(req.getParameter("itemId"));
-			System.out.println(readItem(id));
+			System.out.println(itemService.readItemService(id));
+			resp.getWriter().println(itemService.readItemService(id));
 		} catch (Exception e) {
 			System.out.println("Error in read-operation");
 			e.printStackTrace();
+			throw e;
 		}
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE, value = "/test", produces = "text/plain")
-	public @ResponseBody void doDelete(HttpServletRequest req) {
+	@RequestMapping(method = RequestMethod.DELETE, value = "/delete-item", produces = "text/plain")
+	public @ResponseBody void doDelete(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		try {
 			long id = Long.valueOf(req.getParameter("itemId"));
-			deleteItem(id);
+			itemService.deleteItemService(id);
+			resp.getWriter().println("Delete Item is OK");
 		} catch (Exception e) {
 			System.out.println("Error in delete-operation");
 			e.printStackTrace();
+			throw e;
 		}
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/test", produces = "application/json")
-	public @ResponseBody void doPost(HttpServletRequest req) {
+	@RequestMapping(method = RequestMethod.POST, value = "/save-item", produces = "application/json")
+	public @ResponseBody void doPost(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         try {
         	String stringJson = req.getReader().lines().collect(Collectors.joining());
         	JSONObject userJson = new JSONObject(stringJson);
@@ -52,15 +57,17 @@ public class ItemController {
         	userItem.setId(id);
         	userItem.setName(name);
         	userItem.setDescription(description);
-        	createItem(userItem);
+        	itemService.createItemService(userItem);
+        	resp.getWriter().println("Save Item is OK");
         } catch (Exception e) {
         	System.out.println("Error in post-operation");
         	e.printStackTrace();
+        	throw e;
         }
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value = "/test", produces = "text/plain")
-	public @ResponseBody void doPut(HttpServletRequest req) {
+	@RequestMapping(method = RequestMethod.PUT, value = "/update-item", produces = "text/plain")
+	public @ResponseBody void doPut(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		try {
 			String stringJson = req.getReader().lines().collect(Collectors.joining());
 			JSONObject userJson = new JSONObject(stringJson);
@@ -71,26 +78,12 @@ public class ItemController {
         	userItem.setId(id);
         	userItem.setName(name);
         	userItem.setDescription(description);
-        	updateItem(userItem);
+        	itemService.updateItemService(userItem);
+        	resp.getWriter().println("Update Item is OK");
         } catch (Exception e) {
         	System.out.println("Error in put-operation");
         	e.printStackTrace();
+        	throw e;
         }
-	}
-	
-	public Item createItem(Item item) throws Exception {
-		return itemService.createItemService(item);
-	}
-	
-	public Item updateItem(Item item) throws Exception {
-		return itemService.updateItemService(item);
-	}
-	
-	public @ResponseBody Item readItem(long id) throws Exception {
-		return itemService.readItemService(id);
-	}
-	
-	public Item deleteItem(long id) throws Exception {
-		return itemService.deleteItemService(id);
 	}
 }

@@ -17,6 +17,9 @@ public class ItemDAO {
 		if (entity == null || entity.getName() == null) {
 			throw new Exception("Item without name, no save Item");
 		}
+		if (findById(entity.getId()) != null) {
+			throw new Exception("Item with id = " + entity.getId() + " exists, no save Item");
+		}
 		Transaction transaction = null;
 		try (Session session = createSessionFactory().openSession()) {
 			transaction = session.getTransaction();
@@ -26,10 +29,10 @@ public class ItemDAO {
 			session.save(entity);
 			
 			transaction.commit();
-			System.out.println("Save Item is done");
+			System.out.println("Save Item with id = " + entity.getId() + " is done");
 		} catch (HibernateException e) {
 			e.printStackTrace();
-			throw new Exception ("Save Item is failed");
+			throw new Exception ("Save Item with id = " + entity.getId() + " is failed");
 		}
 		return entity;
 	}
@@ -39,8 +42,7 @@ public class ItemDAO {
 		Transaction transaction = null;
 		Item entity = findById(id);
 		if (entity == null) {
-			System.out.println("Not found Item by ID = " + id);
-			return null;
+			throw new Exception("Not found Item by ID = " + id);
 		}
 		try (Session session = createSessionFactory().openSession()) {
 			transaction = session.getTransaction();
