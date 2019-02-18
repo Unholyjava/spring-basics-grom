@@ -14,9 +14,6 @@ public class ItemDAO {
 	private SessionFactory sessionFactory; 
 		
 	public Item save(Item entity) throws Exception {
-		if (entity == null || entity.getName() == null) {
-			throw new Exception("Item without name, no save Item");
-		}
 		if (findById(entity.getId()) != null) {
 			throw new Exception("Item with id = " + entity.getId() + " exists, no save Item");
 		}
