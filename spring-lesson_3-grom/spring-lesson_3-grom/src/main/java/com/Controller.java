@@ -10,17 +10,6 @@ public class Controller {
 	@Autowired
 	private FileService fileService;
 	
-	@Autowired
-	private StorageService storageService;
-	
-	public FileService getFileService() {
-		return fileService;
-	}
-	
-	public StorageService getStorageService() {
-		return storageService;
-	}
-
 	public void put(Storage storage, File file) throws Exception {
 		fileService.putFileInStorage(storage, file);
 	}

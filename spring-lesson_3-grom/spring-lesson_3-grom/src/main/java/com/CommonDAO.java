@@ -16,9 +16,6 @@ public class CommonDAO<T> implements DAO<T>{
 		
 	public T save(T entity) throws Exception {
 		
-//		if (findById(entity.getId()) != null) {
-//			throw new Exception("Item with id = " + entity.getId() + " exists, no save Item");
-//		}
 		Transaction transaction = null;
 		String entityClass = entity.getClass().getSimpleName();
 		try (Session session = createSessionFactory().openSession()) {
@@ -35,7 +32,6 @@ public class CommonDAO<T> implements DAO<T>{
 		}
 		return entity;
 	}
-	
 	
 	public T delete(long id) throws Exception {
 		Transaction transaction = null;
@@ -59,10 +55,6 @@ public class CommonDAO<T> implements DAO<T>{
 	}
 	
 	public T update(T entity) throws Exception {
-//		Item entityOld = findById(entity.getId());
-//		if (entityOld == null) {
-//			throw new Exception("Item is upsent, no update Item");
-//		}	
 		Transaction transaction = null;
 		String entityClass = entity.getClass().getSimpleName();
 		try (Session session = createSessionFactory().openSession()) {

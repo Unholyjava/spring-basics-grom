@@ -1,32 +1,23 @@
 package com;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-
 import entity.File;
 import entity.Storage;
 
-@Controller
 public class FileService {
 	@Autowired
-	private CommonDAO<File> commonDao;
-	
-
-	@Autowired
-	private DBServiceOracle dbService;
+	private FileDAO fileDao;
 	
 	@Autowired
-	private ValidatorInputData validatorInputData;
+	private StorageDAO storageDao;
 	
-	public FileService(CommonDAO<File> commonDao) {
-		this.commonDao = commonDao;
-	}
-
+	private ValidatorInputData validatorInputData = new ValidatorInputData();
+	
 	public void putFileInStorage(Storage storage, File file) throws Exception {
 		try {
-			validatorInputData.isStorageAndFileValid(storage, file, dbService.findFilesByStorageID(storage.getId()));
+			validatorInputData.isStorageAndFileValid(storage, file, storageDao.findFilesByStorageID(storage.getId()));
 			file.setStorage(storage);
-			commonDao.update(file);
+			fileDao.update(file);
 		} catch (Exception e) {
 			throw new Exception ("not put File with ID = " + file.getId() 
 				+ " in to Storage with ID = " + storage.getId());
@@ -35,8 +26,8 @@ public class FileService {
 	
 	public void deleteFile(Storage storage, File file) throws Exception {
 		try {
-			validatorInputData.isFileInStorage(dbService.findFilesByStorageID(storage.getId()), file, storage.getId());
-			commonDao.delete(file.getId());
+			validatorInputData.isFileInStorage(storageDao.findFilesByStorageID(storage.getId()), file, storage.getId());
+			fileDao.delete(file.getId());
 		} catch (Exception e) {
 			throw new Exception ("not delete File with ID = " + file.getId() 
 				+ " from Storage with ID = " + storage.getId());
@@ -45,9 +36,9 @@ public class FileService {
 	
 	public void transferFile(Storage storageFrom, Storage storageTo, long id) throws Exception {
 		try {
-			File file = commonDao.findById(id);
-			validatorInputData.isFileInStorage(dbService.findFilesByStorageID(storageFrom.getId()), file, storageFrom.getId()); 
-			validatorInputData.isStorageAndFileValid(storageTo, file, dbService.findFilesByStorageID(storageTo.getId()));
+			File file = fileDao.findById(id);
+			validatorInputData.isFileInStorage(storageDao.findFilesByStorageID(storageFrom.getId()), file, storageFrom.getId()); 
+			validatorInputData.isStorageAndFileValid(storageTo, file, storageDao.findFilesByStorageID(storageTo.getId()));
 			putFileInStorage(storageTo, file);
 		} catch (Exception e) {
 			throw new Exception ("not put File with ID = " + id 
@@ -58,8 +49,8 @@ public class FileService {
 	
 	public void transferAll(Storage storageFrom, Storage storageTo) throws Exception {
 		try {
-			for (File file : dbService.findFilesByStorageID(storageFrom.getId())) {
-				validatorInputData.isStorageAndFileValid(storageTo, file, dbService.findFilesByStorageID(storageTo.getId()));
+			for (File file : storageDao.findFilesByStorageID(storageFrom.getId())) {
+				validatorInputData.isStorageAndFileValid(storageTo, file, storageDao.findFilesByStorageID(storageTo.getId()));
 				putFileInStorage(storageTo, file);
 			}
 		} catch (Exception e) {
@@ -69,6 +60,6 @@ public class FileService {
 	}
 	
 	public CommonDAO<File> getCommonDao() {
-		return commonDao;
+		return fileDao;
 	}
 }

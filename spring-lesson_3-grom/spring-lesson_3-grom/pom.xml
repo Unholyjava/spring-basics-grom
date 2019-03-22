@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>spring-lesson_2_2-grom</groupId>
-  <artifactId>spring-lesson_2_2-grom</artifactId>
+  <groupId>spring-lesson_3-grom</groupId>
+  <artifactId>spring-lesson_3-grom</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>spring-lesson_2_2-grom Maven Webapp</name>
+  <name>spring-lesson_3-grom Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
@@ -55,6 +55,6 @@
 			</plugin>
 		</plugins>
 	</pluginManagement>
-    <finalName>spring-lesson_2_2-grom</finalName>
+    <finalName>spring-lesson_3-grom</finalName>
   </build>
 </project>
