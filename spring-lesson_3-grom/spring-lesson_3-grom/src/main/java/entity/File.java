@@ -53,7 +53,7 @@ public class File {
 	}
 	
 	@OneToOne (targetEntity = Storage.class, 
-			cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+			cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn (name = "ID_STORAGE")
 	public Storage getStorage() {
 		return storage;

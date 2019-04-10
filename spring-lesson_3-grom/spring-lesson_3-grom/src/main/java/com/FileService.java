@@ -19,7 +19,7 @@ public class FileService {
 			file.setStorage(storage);
 			fileDao.update(file);
 		} catch (Exception e) {
-			throw new Exception ("not put File with ID = " + file.getId() 
+			throw new Exception (e.getMessage() + "not put File with ID = " + file.getId() 
 				+ " in to Storage with ID = " + storage.getId());
 		}
 	}
@@ -27,9 +27,11 @@ public class FileService {
 	public void deleteFile(Storage storage, File file) throws Exception {
 		try {
 			validatorInputData.isFileInStorage(storageDao.findFilesByStorageID(storage.getId()), file, storage.getId());
-			fileDao.delete(file.getId());
+			//fileDao.delete(file.getId());
+			file.setStorage(null);
+			fileDao.update(file);
 		} catch (Exception e) {
-			throw new Exception ("not delete File with ID = " + file.getId() 
+			throw new Exception (e.getMessage() + "not delete File with ID = " + file.getId() 
 				+ " from Storage with ID = " + storage.getId());
 		} 
 	}
@@ -41,7 +43,7 @@ public class FileService {
 			validatorInputData.isStorageAndFileValid(storageTo, file, storageDao.findFilesByStorageID(storageTo.getId()));
 			putFileInStorage(storageTo, file);
 		} catch (Exception e) {
-			throw new Exception ("not put File with ID = " + id 
+			throw new Exception (e.getMessage() + "not put File with ID = " + id 
 				+ " to Storage with ID = " + storageTo.getId()
 				+ " from Storage with ID = " + storageFrom.getId());
 		}
@@ -54,7 +56,7 @@ public class FileService {
 				putFileInStorage(storageTo, file);
 			}
 		} catch (Exception e) {
-			throw new Exception ("not transfer all files from Storage with ID = " + storageFrom.getId() 
+			throw new Exception (e.getMessage() + "not transfer all files from Storage with ID = " + storageFrom.getId() 
 				+ " to Storage with ID = " + storageTo.getId());
 		}
 	}

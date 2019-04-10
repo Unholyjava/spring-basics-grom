@@ -9,11 +9,11 @@
 	<context:component-scan base-package="com"/>
 	
 	<bean id="fileDao" class="com.FileDAO">
-		<constructor-arg name="classCurrent" value="com.FileDAO"/>
+		<constructor-arg name="classCurrent" value="entity.File"/>
 	</bean>
 	
 	<bean id="storageDao" class="com.StorageDAO">
-		<constructor-arg name="classCurrent" value="com.StorageDAO"/>
+		<constructor-arg name="classCurrent" value="entity.Storage"/>
 	</bean>
 
 	<bean id="fileService" class="com.FileService">

@@ -60,7 +60,7 @@ public class ValidatorInputData {
 	}
 	
 	public void isStorageAndFileValid (Storage storage, File file, List<File> filesInStorage) throws Exception {
-		isFormatsEquals (storage.getFormatsSupported(), file, storage.getId()); 
+		isFormatsEquals (storage.getArrayFormatsSupported(), file, storage.getId()); 
 		isIdNotInStorage (filesInStorage, file, storage.getId());
 		isStorageMaxSizeFull (storage, file, filesInStorage);
 	}

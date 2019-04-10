@@ -1,26 +1,25 @@
 package entity;
 
 
-import java.util.Arrays;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "STORAGE")
 public class Storage {
 
 	private long id;
-	private String[] formatsSupported;
+	private String formatsSupported;
 	private String storageCountry;
 	private long storageSize;
 	
 	public Storage() {
 	}
 	
-	public Storage(long id, String[] formatsSupported, String storageCountry, long storageSize) {
+	public Storage(long id, String formatsSupported, String storageCountry, long storageSize) {
 		super();
 		this.id = id;
 		this.formatsSupported = formatsSupported;
@@ -35,17 +34,10 @@ public class Storage {
 	}
 	
 	@Column (name = "FORMATSSUPPORTED")
-	public String[] getFormatsSupported() {
+	public String getFormatsSupported() {
 		return formatsSupported;
 	}
 	
-	public String getStringFormatsSupported() {
-		StringBuilder sb = new StringBuilder();
-		for (String format : getFormatsSupported()) {
-			sb.append(format + ", ");
-		}
-		return sb.toString().substring(0, sb.toString().length() - 2);
-	}
 	
 	@Column (name = "STORAGECOUNTRY")
 	public String getStorageCountry() {
@@ -61,7 +53,7 @@ public class Storage {
 		this.id = id;
 	}
 
-	public void setFormatsSupported(String[] formatsSupported) {
+	public void setFormatsSupported(String formatsSupported) {
 		this.formatsSupported = formatsSupported;
 	}
 
@@ -73,9 +65,14 @@ public class Storage {
 		this.storageSize = storageSize;
 	}
 
+	@Transient
+	public String[] getArrayFormatsSupported() {
+		return getFormatsSupported().replaceAll(" ", "").split(",");
+	}
+	
 	@Override
 	public String toString() {
-		return "Storage [id=" + id + ", formatsSupported=" + Arrays.toString(formatsSupported) 
+		return "Storage [id=" + id + ", formatsSupported=" + formatsSupported 
 				+ ", storageCountry=" + storageCountry + ", storageSize=" + storageSize + "]";
 	}
 }

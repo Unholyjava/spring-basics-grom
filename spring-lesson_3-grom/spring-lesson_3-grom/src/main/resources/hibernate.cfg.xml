@@ -10,7 +10,7 @@
 
 		<!-- Assume test is the database name -->
 		<property name="hibernate.connection.url">
-			jdbc:oracle:thin:@gromcodegregorydb-lessons.cykue0lynxa0.us-east-2.rds.amazonaws.com:1521:ORCL
+			jdbc:oracle:thin:@gromcodegregorydb-lessons.cgiruusabwsj.us-east-2.rds.amazonaws.com:1521:ORCL
 		</property>
 		<property name="hibernate.connection.username">
 			main
