@@ -53,7 +53,7 @@ public class FileService {
 		try {
 			List<File> fileList = storageDao.findFilesByStorageID(storageFrom.getId());
 			for (File file : fileList) {
-				ValidatorInputData.isStorageAndFileValid(storageTo, file, storageDao.findFilesByStorageID(storageTo.getId()));
+				ValidatorInputData.isStorageAndFileValid(storageTo, file, fileList);
 				//putFileInStorage(storageTo, file);
 			}
 			fileDao.updateFileArrayByStorage(storageTo, fileList);
