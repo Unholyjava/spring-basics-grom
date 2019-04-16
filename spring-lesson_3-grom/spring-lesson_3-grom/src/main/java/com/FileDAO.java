@@ -1,6 +1,13 @@
 package com;
 
+import java.util.List;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import entity.File;
+import entity.Storage;
 
 public class FileDAO extends CommonDAO<File>{
 
@@ -32,5 +39,27 @@ public class FileDAO extends CommonDAO<File>{
 	
 	public File findById(long id) throws Exception {
 		return super.findById(id);
+	}
+	
+	public void updateFileArrayByStorage(Storage storageTo, List<File> fileList) throws Exception {
+		Transaction transaction = null;
+		try (Session session = createSessionFactory().openSession()) {
+			transaction = session.getTransaction();
+			transaction.begin();
+			
+			for (File file : fileList) {
+				file.setStorage(storageTo);
+				update(file);
+			}
+					
+			transaction.commit();
+			System.out.println("Update of File's array is done");
+		} catch (HibernateException e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			//e.printStackTrace();
+			throw new Exception("Update of File's array is failed");
+		} 
 	}
 }

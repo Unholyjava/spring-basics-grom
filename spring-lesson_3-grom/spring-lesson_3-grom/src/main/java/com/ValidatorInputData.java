@@ -7,7 +7,7 @@ import entity.Storage;
 
 public class ValidatorInputData {
 	
-	public void isFormatsEquals (String[] formats, File file, long storageId) throws Exception {
+	public static void isFormatsEquals (String[] formats, File file, long storageId) throws Exception {
 		for (String format : formats) {
 			if (format.equals(file.getFormat())) {
 				return;
@@ -17,7 +17,7 @@ public class ValidatorInputData {
 			+ " not equal Storage's format, ID = " + storageId + "\n");
 	}
 	
-	public void isIdNotInStorage (List<File> files, File file, long storageId) throws Exception {
+	public static void isIdNotInStorage (List<File> files, File file, long storageId) throws Exception {
 		for (File currentFile : files) {
 			if (currentFile != null && currentFile.getId() == file.getId()) {
 				throw new Exception("File, ID = " + file.getId() 
@@ -26,7 +26,7 @@ public class ValidatorInputData {
 		}
 	}
 	
-	public void isFileInStorage (List<File> files, File file, long storageId) throws Exception {
+	public static void isFileInStorage (List<File> files, File file, long storageId) throws Exception {
 		for (File currentFile : files) {
 			if (currentFile != null && file.equals(currentFile)) {
 				return;
@@ -36,7 +36,7 @@ public class ValidatorInputData {
 			+ " is not used in Storage, ID = " + storageId + "\n");
 	}
 	
-	public void isStorageMaxSizeFull (Storage storage, File file, List<File> filesInStorage) throws Exception {
+	public static void isStorageMaxSizeFull (Storage storage, File file, List<File> filesInStorage) throws Exception {
 		long maxSizeStorage = 0;
 		for (File files : filesInStorage) {
 			if (files != null) {
@@ -59,7 +59,7 @@ public class ValidatorInputData {
 		throw new Exception("File, ID = " + fileId + " not found in Storage, ID = " + storageId + "\n");
 	}
 	
-	public void isStorageAndFileValid (Storage storage, File file, List<File> filesInStorage) throws Exception {
+	public static void isStorageAndFileValid (Storage storage, File file, List<File> filesInStorage) throws Exception {
 		isFormatsEquals (storage.getArrayFormatsSupported(), file, storage.getId()); 
 		isIdNotInStorage (filesInStorage, file, storage.getId());
 		isStorageMaxSizeFull (storage, file, filesInStorage);

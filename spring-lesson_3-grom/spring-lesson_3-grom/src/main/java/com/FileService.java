@@ -1,5 +1,7 @@
 package com;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import entity.File;
 import entity.Storage;
@@ -11,11 +13,9 @@ public class FileService {
 	@Autowired
 	private StorageDAO storageDao;
 	
-	private ValidatorInputData validatorInputData = new ValidatorInputData();
-	
 	public void putFileInStorage(Storage storage, File file) throws Exception {
 		try {
-			validatorInputData.isStorageAndFileValid(storage, file, storageDao.findFilesByStorageID(storage.getId()));
+			ValidatorInputData.isStorageAndFileValid(storage, file, storageDao.findFilesByStorageID(storage.getId()));
 			file.setStorage(storage);
 			fileDao.update(file);
 		} catch (Exception e) {
@@ -26,7 +26,7 @@ public class FileService {
 	
 	public void deleteFile(Storage storage, File file) throws Exception {
 		try {
-			validatorInputData.isFileInStorage(storageDao.findFilesByStorageID(storage.getId()), file, storage.getId());
+			ValidatorInputData.isFileInStorage(storageDao.findFilesByStorageID(storage.getId()), file, storage.getId());
 			//fileDao.delete(file.getId());
 			file.setStorage(null);
 			fileDao.update(file);
@@ -39,8 +39,8 @@ public class FileService {
 	public void transferFile(Storage storageFrom, Storage storageTo, long id) throws Exception {
 		try {
 			File file = fileDao.findById(id);
-			validatorInputData.isFileInStorage(storageDao.findFilesByStorageID(storageFrom.getId()), file, storageFrom.getId()); 
-			validatorInputData.isStorageAndFileValid(storageTo, file, storageDao.findFilesByStorageID(storageTo.getId()));
+			ValidatorInputData.isFileInStorage(storageDao.findFilesByStorageID(storageFrom.getId()), file, storageFrom.getId()); 
+			ValidatorInputData.isStorageAndFileValid(storageTo, file, storageDao.findFilesByStorageID(storageTo.getId()));
 			putFileInStorage(storageTo, file);
 		} catch (Exception e) {
 			throw new Exception (e.getMessage() + "not put File with ID = " + id 
@@ -51,10 +51,12 @@ public class FileService {
 	
 	public void transferAll(Storage storageFrom, Storage storageTo) throws Exception {
 		try {
-			for (File file : storageDao.findFilesByStorageID(storageFrom.getId())) {
-				validatorInputData.isStorageAndFileValid(storageTo, file, storageDao.findFilesByStorageID(storageTo.getId()));
-				putFileInStorage(storageTo, file);
+			List<File> fileList = storageDao.findFilesByStorageID(storageFrom.getId());
+			for (File file : fileList) {
+				ValidatorInputData.isStorageAndFileValid(storageTo, file, storageDao.findFilesByStorageID(storageTo.getId()));
+				//putFileInStorage(storageTo, file);
 			}
+			fileDao.updateFileArrayByStorage(storageTo, fileList);
 		} catch (Exception e) {
 			throw new Exception (e.getMessage() + "not transfer all files from Storage with ID = " + storageFrom.getId() 
 				+ " to Storage with ID = " + storageTo.getId());
